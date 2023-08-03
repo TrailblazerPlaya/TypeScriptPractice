@@ -88,54 +88,54 @@
 //lesson 16 картежи 
 // const userDataTuple: [string, number] = ["John", 22];   
 
-//lesson 25 практика работы с типами и интерфейсами 
-type ValidAmount = "empty" | number;
+// //lesson 25 практика работы с типами и интерфейсами 
+// type ValidAmount = "empty" | number;
 
-interface ClothesWarehouse {
-	jackets: ValidAmount;
-	hats: ValidAmount;
-	socks: ValidAmount;
-	pants: ValidAmount;
-}
+// interface ClothesWarehouse {
+// 	jackets: ValidAmount;
+// 	hats: ValidAmount;
+// 	socks: ValidAmount;
+// 	pants: ValidAmount;
+// }
 
 // структура данных склада с канцтоварами
 
-interface StationeryWarehouse {
-	scissors: ValidAmount; 
-	paper: "empty" | boolean;
-}
+// interface StationeryWarehouse {
+// 	scissors: ValidAmount; 
+// 	paper: "empty" | boolean;
+// }
 
-// структура данных склада с бытовой техникой
+// // структура данных склада с бытовой техникой
 
-interface AppliancesWarehouse {
-	dishwashers: ValidAmount;
-	cookers: ValidAmount;
-	mixers: ValidAmount;
-}
+// interface AppliancesWarehouse {
+// 	dishwashers: ValidAmount;
+// 	cookers: ValidAmount;
+// 	mixers: ValidAmount;
+// }
 
-// общая структура данных, наследует все данные из трех выше
-// + добавляет свои
+// // общая структура данных, наследует все данные из трех выше
+// // + добавляет свои
 
-interface TotalWarehouse extends ClothesWarehouse, StationeryWarehouse, AppliancesWarehouse {
-	deficit: boolean;
-	date: Date;
-}
+// interface TotalWarehouse extends ClothesWarehouse, StationeryWarehouse, AppliancesWarehouse {
+// 	deficit: boolean;
+// 	date: Date;
+// }
 
 // главный объект со всеми данными, должен подходить под формат TotalWarehouse
 
-const totalData: TotalWarehouse = {
-	jackets: 5,
-	hats: "empty",
-	socks: "empty",
-	pants: 15,
-	scissors: 15,
-	paper: true,
-	dishwashers: 3,
-	cookers: "empty",
-	mixers: 14,
-    deficit: true,
-    date: new Date()
-};
+// const totalData: TotalWarehouse = {
+// 	jackets: 5,
+// 	hats: "empty",
+// 	socks: "empty",
+// 	pants: 15,
+// 	scissors: 15,
+// 	paper: true,
+// 	dishwashers: 3,
+// 	cookers: "empty",
+// 	mixers: 14,
+//     deficit: true,
+//     date: new Date()
+// };
 
 // Реализуйте функцию, которая принимает в себя главный объект totalData нужного формата
 // и возвращает всегда строку
@@ -146,16 +146,43 @@ const totalData: TotalWarehouse = {
 // "We need this items: hats, socks, cookers"
 // Товары через запятую, в конце её не должно быть. Пробел после двоеточия, в конце строки его нет.
 
-function printReport(data: TotalWarehouse) : string {
-    const result: string = Object.entries(data)
-                .filter((item) => item[1] === "empty")
-                .reduce((res, item) => `${res} ${item[0]}`, "");  
-    if (result.trim().length) {
-        return `We need this items: ${result.slice(0, -1)}`;
-    } else {
-	    return "Everything fine";
-    }
+// function printReport(data: TotalWarehouse) : string {
+//     const result: string = Object.entries(data)
+//                 .filter((item) => item[1] === "empty")
+//                 .reduce((res, item) => `${res} ${item[0]}`, "");  
+//     if (result.trim().length) {
+//         return `We need this items: ${result.slice(0, -1)}`;
+//     } else {
+// 	    return "Everything fine";
+//     }
 	
+// }
+
+// console.log(printReport(totalData));
+
+
+//lesson 27 
+interface User {
+	login: string;
+	password: string;
+	age: number;
+	// adress?: string;//этот параметр не обязателен
+	adress: string | undefined;
+	parents? : {
+		mother?: string;
+		father?: string;
+	}
 }
 
-console.log(printReport(totalData));
+const user: User = {
+	login: "John",
+	password: "123",
+	age: 22,
+	adress: "Moscow"
+}
+
+const dbName = '123123';
+
+function sendUserData(obj: User, db: string): void {
+	console.log(obj.parents?.father?.toLowerCase(), db?.toLowerCase())
+}
