@@ -198,62 +198,130 @@
 // format = один из перечисления выше
 // subtitles - необязательное поле типа строка
 // marks - необязательное поле неизвестного типа
-enum TypesOfMedia {
-	video = "video",
-	audio = "audio",
-};
-enum FormatsOfMedia {
-	mp4 = ".mp4",
-	mov = ".mov",
-	mkv = ".mkv",
-	flv = ".flv",
-	webM = ".webM",
+// enum TypesOfMedia {
+// 	video = "video",
+// 	audio = "audio",
+// };
+// enum FormatsOfMedia {
+// 	mp4 = ".mp4",
+// 	mov = ".mov",
+// 	mkv = ".mkv",
+// 	flv = ".flv",
+// 	webM = ".webM",
+// }
+
+
+// interface Media {
+// 	name: string;
+// 	type: TypesOfMedia;
+// 	format: FormatsOfMedia;
+// 	subtitles?: string;
+// 	marks?: unknown;//изначально указал string[], это не правильно
+// }
+
+
+// function playMedia(
+// 	{ name, type, format, subtitles, marks }: Media = {
+// 		name: "",
+// 		type: TypesOfMedia.video,
+// 		format: FormatsOfMedia.mp4,
+// 		subtitles: "",
+// 		marks: [],
+// 	}
+// ): string {
+// 	let marksLog: string;
+
+//     // Создать функционал, что если marks - это массив, то "сложить" все эелементы в одну строку и поместить в marksLog
+//     // Если это строка, то просто поместить её в marksLog
+//     // Если что-то другое - то marksLog = "Unsupported type of marks"
+//     // Не допускайте any!
+
+// 	if (marks instanceof Array) {
+// 		console.log(`Media ${name}${format} is ${type}`);
+// 	} else if (marks === 'string') {
+// 		marksLog = marks;
+// 	} else {
+// 		marksLog = "Unsupported type of marks";
+// 	}
+// 	// console.log(`Media ${name}${format} is ${type}
+//     // Subtitles: ${subtitles ?? "none"}`);
+//     // помните что это за оператор ??
+
+// 	return "Media started";
+// }
+
+// playMedia({
+// 	name: "WoW",
+// 	format: FormatsOfMedia.mp4,
+// 	type: TypesOfMedia.video,
+// 	subtitles: "hmhmhm hmhmhm doh",
+// 	marks: ["4:30", "5:40"],
+// });
+
+
+//lesson 40
+// Request
+enum AnimalEnum {
+	Cat = 'cat',
+	Dog = 'dog',
+	Bird = 'bird',
+}
+
+enum Status {
+	Available = 'available',
+	NotAvailable = 'not available',
 }
 
 
-interface Media {
-	name: string;
-	type: TypesOfMedia;
-	format: FormatsOfMedia;
-	subtitles?: string;
-	marks?: unknown;//изначально указал string[], это не правильно
+interface Animal {
+    animal: AnimalEnum,
+    breed: string,
+    sterilized?: string
 }
 
+// Response #1
 
-function playMedia(
-	{ name, type, format, subtitles, marks }: Media = {
-		name: "",
-		type: TypesOfMedia.video,
-		format: FormatsOfMedia.mp4,
-		subtitles: "",
-		marks: [],
-	}
-): string {
-	let marksLog: string;
+interface AnimalData { //можно было прописать extends для Animal чтобы не дублировать код
+    status: Status.Available,
+    data: {
+        animal: AnimalEnum,
+        breed: string,
+        sterilized?: string,
+        location: string,
+        age?: number
+    }
+}
 
-    // Создать функционал, что если marks - это массив, то "сложить" все эелементы в одну строку и поместить в marksLog
-    // Если это строка, то просто поместить её в marksLog
-    // Если что-то другое - то marksLog = "Unsupported type of marks"
-    // Не допускайте any!
+// Response #2
 
-	if (marks instanceof Array) {
-		console.log(`Media ${name}${format} is ${type}`);
-	} else if (marks === 'string') {
-		marksLog = marks;
+interface AnimalData2 {
+    status: Status.NotAvailable,
+    data: {
+        message: string,
+        nextUpdateIn: Date
+    }
+}
+
+//следовало создать еще один тип, который объединял бы оба интерфейса
+
+function checkAnimalData(animal: AnimalData | AnimalData2): string  {
+	if (Status.Available === animal.status) {
+		// Заменить условие!
+		// const one = console.log(animal.data);
+		return `${animal.data}, you can try in ${animal.data}`;
+		// return one;
 	} else {
-		marksLog = "Unsupported type of marks";
+		return `${animal.data}, you can try in ${animal.data.nextUpdateIn}`;
+		// const two = console.log(animal.data);
+		// return two;
 	}
-	// console.log(`Media ${name}${format} is ${type}
-    // Subtitles: ${subtitles ?? "none"}`);
-    // помните что это за оператор ??
-
-	return "Media started";
 }
 
-playMedia({
-	name: "WoW",
-	format: FormatsOfMedia.mp4,
-	type: TypesOfMedia.video,
-	subtitles: "hmhmhm hmhmhm doh",
-	marks: ["4:30", "5:40"],
-});
+checkAnimalData({
+	status: Status.NotAvailable,
+	data: {
+		message: "Not available",
+		nextUpdateIn: new Date()
+	}
+})
+//задачу решил, но нужно использовать больше интерфейсов и типов данных для более ясной структуры кода
