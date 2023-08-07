@@ -261,67 +261,142 @@
 
 //lesson 40
 // Request
-enum AnimalEnum {
-	Cat = 'cat',
-	Dog = 'dog',
-	Bird = 'bird',
+// enum AnimalEnum {
+// 	Cat = 'cat',
+// 	Dog = 'dog',
+// 	Bird = 'bird',
+// }
+
+// enum Status {
+// 	Available = 'available',
+// 	NotAvailable = 'not available',
+// }
+
+
+// interface Animal {
+//     animal: AnimalEnum,
+//     breed: string,
+//     sterilized?: string
+// }
+
+// // Response #1
+
+// interface AnimalData { //можно было прописать extends для Animal чтобы не дублировать код
+//     status: Status.Available,
+//     data: {
+//         animal: AnimalEnum,
+//         breed: string,
+//         sterilized?: string,
+//         location: string,
+//         age?: number
+//     }
+// }
+
+// // Response #2
+
+// interface AnimalData2 {
+//     status: Status.NotAvailable,
+//     data: {
+//         message: string,
+//         nextUpdateIn: Date
+//     }
+// }
+
+// //следовало создать еще один тип, который объединял бы оба интерфейса
+
+// function checkAnimalData(animal: AnimalData | AnimalData2): string  {
+// 	if (Status.Available === animal.status) {
+// 		// Заменить условие!
+// 		// const one = console.log(animal.data);
+// 		return `${animal.data}, you can try in ${animal.data}`;
+// 		// return one;
+// 	} else {
+// 		return `${animal.data}, you can try in ${animal.data.nextUpdateIn}`;
+// 		// const two = console.log(animal.data);
+// 		// return two;
+// 	}
+// }
+
+// checkAnimalData({
+// 	status: Status.NotAvailable,
+// 	data: {
+// 		message: "Not available",
+// 		nextUpdateIn: new Date()
+// 	}
+// })
+//задачу решил, но нужно использовать больше интерфейсов и типов данных для более ясной структуры кода
+
+
+///lesson42
+const forms = document.querySelectorAll("form");
+const emailInput = document.querySelector("#email") as HTMLInputElement;
+const titleInput = document.querySelector("#title") as HTMLInputElement;
+const textInput = document.querySelector("#text") as HTMLInputElement;
+const checkInput = document.querySelector("#check") as HTMLInputElement;
+// const submitButton = document.querySelector(".btn") as HTMLButtonElement;
+//для начала нужно создать interface для этого объекта, буква I в начале обозначает интерфейс
+interface IFormData {
+	email: string;
+	title: string;
+	text: string;
+	checkbox: boolean;
 }
 
-enum Status {
-	Available = 'available',
-	NotAvailable = 'not available',
-}
 
+const formData: IFormData = {
+	email: "",
+	title: "",
+	text: "",
+	checkbox: false,
+};
 
-interface Animal {
-    animal: AnimalEnum,
-    breed: string,
-    sterilized?: string
-}
+//методом перебора каждой формы происходит событие submit
+forms.forEach((form) => {
+	form.addEventListener("submit", (e) => {
+		e.preventDefault();
 
-// Response #1
+	// Можно и создавать другой объект для соблюдения иммутабельности, но пока не обязательно
+	formData.email = emailInput?.value ?? "";
+	formData.title = titleInput?.value ?? "";
+	formData.text = textInput?.value ?? "";
+	formData.checkbox = checkInput?.checked ?? false;
 
-interface AnimalData { //можно было прописать extends для Animal чтобы не дублировать код
-    status: Status.Available,
-    data: {
-        animal: AnimalEnum,
-        breed: string,
-        sterilized?: string,
-        location: string,
-        age?: number
-    }
-}
-
-// Response #2
-
-interface AnimalData2 {
-    status: Status.NotAvailable,
-    data: {
-        message: string,
-        nextUpdateIn: Date
-    }
-}
-
-//следовало создать еще один тип, который объединял бы оба интерфейса
-
-function checkAnimalData(animal: AnimalData | AnimalData2): string  {
-	if (Status.Available === animal.status) {
-		// Заменить условие!
-		// const one = console.log(animal.data);
-		return `${animal.data}, you can try in ${animal.data}`;
-		// return one;
-	} else {
-		return `${animal.data}, you can try in ${animal.data.nextUpdateIn}`;
-		// const two = console.log(animal.data);
-		// return two;
-	}
-}
-
-checkAnimalData({
-	status: Status.NotAvailable,
-	data: {
-		message: "Not available",
-		nextUpdateIn: new Date()
+	if (validateFormData(formData)) {
+		checkFormData(formData);
 	}
 })
-//задачу решил, но нужно использовать больше интерфейсов и типов данных для более ясной структуры кода
+
+
+
+// Последовательность действий:
+// 1) Происходит submit любой из форм
+// 2) Все данные из 4х полей со страницы переходят в свойства объекта formData
+// 3) Запускается функция validateFormData с этим объектом, возвращает true/false
+// 4) Если на предыдущем этапе true, то запускается функция checkFormData с этим объектом
+
+function validateFormData(data: IFormData): boolean  {
+	// Если каждое из свойств объекта data заполнено
+	if (Object.values(data).every((value) => value!== "")) {
+		return true;
+	} else {
+		console.log("Please, complete all fields");
+		return false;
+	}
+}
+
+function checkFormData(data: IFormData) {
+	const { email } = data;
+	const emails = ["example@gmail.com", "example@ex.com", "admin@gmail.com"];
+
+	// Если email совпадает хотя бы с одним из массива
+	if (emails.some((e) => e === email)) {
+		console.log("This email is already exist");
+	} else {
+		console.log("Posting data...");
+	}
+}
+//с задачей не справился, не знал как записывать данные в объект formData
+//submit кнопку не нужно было получать, так как её тип уже submit 
+//нужно побольше узнать о методах взаимодействия с объектом и как их использовать
+//ну в общем я запомнил как пушить данные в объект с инпута
+//не справился, ну бывает 0.о
