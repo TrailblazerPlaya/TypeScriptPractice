@@ -328,75 +328,223 @@
 
 
 ///lesson42
-const forms = document.querySelectorAll("form");
-const emailInput = document.querySelector("#email") as HTMLInputElement;
-const titleInput = document.querySelector("#title") as HTMLInputElement;
-const textInput = document.querySelector("#text") as HTMLInputElement;
-const checkInput = document.querySelector("#check") as HTMLInputElement;
-// const submitButton = document.querySelector(".btn") as HTMLButtonElement;
-//для начала нужно создать interface для этого объекта, буква I в начале обозначает интерфейс
-interface IFormData {
-	email: string;
-	title: string;
-	text: string;
-	checkbox: boolean;
-}
+// const forms = document.querySelectorAll("form");
+// const emailInput = document.querySelector("#email") as HTMLInputElement;
+// const titleInput = document.querySelector("#title") as HTMLInputElement;
+// const textInput = document.querySelector("#text") as HTMLInputElement;
+// const checkInput = document.querySelector("#check") as HTMLInputElement;
+// // const submitButton = document.querySelector(".btn") as HTMLButtonElement;
+// //для начала нужно создать interface для этого объекта, буква I в начале обозначает интерфейс
+// interface IFormData {
+// 	email: string;
+// 	title: string;
+// 	text: string;
+// 	checkbox: boolean;
+// }
 
 
-const formData: IFormData = {
-	email: "",
-	title: "",
-	text: "",
-	checkbox: false,
-};
+// const formData: IFormData = {
+// 	email: "",
+// 	title: "",
+// 	text: "",
+// 	checkbox: false,
+// };
 
-//методом перебора каждой формы происходит событие submit
-forms.forEach((form) => {
-	form.addEventListener("submit", (e) => {
-		e.preventDefault();
+// //методом перебора каждой формы происходит событие submit
+// forms.forEach((form) => {
+// 	form.addEventListener("submit", (e) => {
+// 		e.preventDefault();
 
-	// Можно и создавать другой объект для соблюдения иммутабельности, но пока не обязательно
-	formData.email = emailInput?.value ?? "";
-	formData.title = titleInput?.value ?? "";
-	formData.text = textInput?.value ?? "";
-	formData.checkbox = checkInput?.checked ?? false;
+// 	// Можно и создавать другой объект для соблюдения иммутабельности, но пока не обязательно
+// 	formData.email = emailInput?.value ?? "";
+// 	formData.title = titleInput?.value ?? "";
+// 	formData.text = textInput?.value ?? "";
+// 	formData.checkbox = checkInput?.checked ?? false;
 
-	if (validateFormData(formData)) {
-		checkFormData(formData);
-	}
-})
+// 	if (validateFormData(formData)) {
+// 		checkFormData(formData);
+// 	}
+// })
 
 
 
-// Последовательность действий:
-// 1) Происходит submit любой из форм
-// 2) Все данные из 4х полей со страницы переходят в свойства объекта formData
-// 3) Запускается функция validateFormData с этим объектом, возвращает true/false
-// 4) Если на предыдущем этапе true, то запускается функция checkFormData с этим объектом
+// // Последовательность действий:
+// // 1) Происходит submit любой из форм
+// // 2) Все данные из 4х полей со страницы переходят в свойства объекта formData
+// // 3) Запускается функция validateFormData с этим объектом, возвращает true/false
+// // 4) Если на предыдущем этапе true, то запускается функция checkFormData с этим объектом
 
-function validateFormData(data: IFormData): boolean  {
-	// Если каждое из свойств объекта data заполнено
-	if (Object.values(data).every((value) => value!== "")) {
-		return true;
-	} else {
-		console.log("Please, complete all fields");
-		return false;
-	}
-}
+// function validateFormData(data: IFormData): boolean  {
+// 	// Если каждое из свойств объекта data заполнено
+// 	if (Object.values(data).every((value) => value!== "")) {
+// 		return true;
+// 	} else {
+// 		console.log("Please, complete all fields");
+// 		return false;
+// 	}
+// }
 
-function checkFormData(data: IFormData) {
-	const { email } = data;
-	const emails = ["example@gmail.com", "example@ex.com", "admin@gmail.com"];
+// function checkFormData(data: IFormData) {
+// 	const { email } = data;
+// 	const emails = ["example@gmail.com", "example@ex.com", "admin@gmail.com"];
 
-	// Если email совпадает хотя бы с одним из массива
-	if (emails.some((e) => e === email)) {
-		console.log("This email is already exist");
-	} else {
-		console.log("Posting data...");
-	}
-}
+// 	// Если email совпадает хотя бы с одним из массива
+// 	if (emails.some((e) => e === email)) {
+// 		console.log("This email is already exist");
+// 	} else {
+// 		console.log("Posting data...");
+// 	}
+// }
 //с задачей не справился, не знал как записывать данные в объект formData
 //submit кнопку не нужно было получать, так как её тип уже submit 
 //нужно побольше узнать о методах взаимодействия с объектом и как их использовать
 //ну в общем я запомнил как пушить данные в объект с инпута
 //не справился, ну бывает 0.о
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////Generics 
+/////////lesson44
+// function processingData <T, A>(data: T[], options: A): string {
+// 	data.length;
+// 	switch(typeof data) {
+// 		case "string": 
+// 			return `${data}, ${options}`;
+// 			break;
+// 		case "number":
+// 			return `${data.toFixed()}, speed: ${options} `;	
+// 			break;
+// 		default:
+// 			return "Unknown type";		
+// 	}		
+
+// }
+
+// let res1 = processingData(['sss'], 1);
+// let res2 = processingData([5], 'sss');
+
+// let res3 = processingData<number, string>([22], 's2qq');
+
+
+
+//////////////lesson47
+// Создать Generic-интерфейс PlayerData, который подходил бы для создания таких объектов:
+interface PlayerData<T> {
+	game: T;
+	hours: number | string | {total: number, inMenu: number};
+	server: string;
+}
+
+const player1: PlayerData<string> = {
+	game: "CS:GO",
+	hours: 300,
+	server: "basic",
+};
+
+const player2: PlayerData<number> = {
+	game: 2048,
+	hours: "300 h.",
+	server: "arcade",
+};
+
+const player3: PlayerData<string> = {
+	game: "Chess",
+	hours: {
+		total: 500,
+		inMenu: 50,
+	},
+	server: "chess",
+};
+
+// Массив данных с фигурами содержит объекты, у каждого из которых обязательно есть свойство name
+// Каждый объект может еще содержать дополнительные свойства в случайном виде
+// Свойство name может иметь только 4 варианта
+// Функция calculateAmountOfFigures должна принимать массив с объектами, у которых обязательно должно быть свойство name
+// Возвращает она объект-экземпляр AmountOfFigures
+// Внутри себя подсчитывает сколько каких фигур было в массиве и записывает результаты в AmountOfFigures
+// С текущими данными в консоль должно попадать:
+// { squares: 3, circles: 2, triangles: 2, others: 1 }
+
+enum FigurName {
+	Rect = "rect",
+	Circle = "circle",
+	Triangle = "triangle",
+	Line = "line",
+}
+
+interface Figur {
+	name: FigurName;
+}
+
+interface AmountOfFigures {
+	squares: number;
+	circles: number;
+	triangles: number;
+	others: number;
+}
+
+function calculateAmountOfFigures<T extends Figur>(figure: T[]): AmountOfFigures {
+	const amounth: AmountOfFigures = {
+		squares: 0,
+		circles: 0,
+		triangles: 0,
+		others: 0,
+	}
+
+	figure.forEach((figure) => {
+		switch (figure.name) {
+			case FigurName.Rect: amounth.squares++; break;
+			case FigurName.Circle: amounth.circles++; break;
+			case FigurName.Triangle: amounth.triangles++; break;
+			default: amounth.others++;
+		}
+	})
+
+	return amounth;
+}
+
+const data = [
+	{
+		name: FigurName.Rect,
+		data: { a: 5, b: 10 },
+	},
+	{
+		name: FigurName.Rect,
+		data: { a: 6, b: 11 },
+	},
+	{
+		name: FigurName.Triangle,
+		data: { a: 5, b: 10, c: 14 },
+	},
+	{
+		name: FigurName.Line,
+		data: { l: 15 },
+	},
+	{
+		name: FigurName.Circle,
+		data: { r: 10 },
+	},
+	{
+		name: FigurName.Circle,
+		data: { r: 5 },
+	},
+	{
+		name: FigurName.Rect,
+		data: { a: 15, b: 7 },
+	},
+	{
+		name: FigurName.Triangle,
+	},
+];
+
+console.log(calculateAmountOfFigures(data));
+
+
