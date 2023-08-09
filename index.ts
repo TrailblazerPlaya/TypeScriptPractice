@@ -437,114 +437,182 @@
 
 //////////////lesson47
 // Создать Generic-интерфейс PlayerData, который подходил бы для создания таких объектов:
-interface PlayerData<T> {
-	game: T;
-	hours: number | string | {total: number, inMenu: number};
-	server: string;
+// interface PlayerData<T> {
+// 	game: T;
+// 	hours: number | string | {total: number, inMenu: number};
+// 	server: string;
+// }
+
+// const player1: PlayerData<string> = {
+// 	game: "CS:GO",
+// 	hours: 300,
+// 	server: "basic",
+// };
+
+// const player2: PlayerData<number> = {
+// 	game: 2048,
+// 	hours: "300 h.",
+// 	server: "arcade",
+// };
+
+// const player3: PlayerData<string> = {
+// 	game: "Chess",
+// 	hours: {
+// 		total: 500,
+// 		inMenu: 50,
+// 	},
+// 	server: "chess",
+// };
+
+// // Массив данных с фигурами содержит объекты, у каждого из которых обязательно есть свойство name
+// // Каждый объект может еще содержать дополнительные свойства в случайном виде
+// // Свойство name может иметь только 4 варианта
+// // Функция calculateAmountOfFigures должна принимать массив с объектами, у которых обязательно должно быть свойство name
+// // Возвращает она объект-экземпляр AmountOfFigures
+// // Внутри себя подсчитывает сколько каких фигур было в массиве и записывает результаты в AmountOfFigures
+// // С текущими данными в консоль должно попадать:
+// // { squares: 3, circles: 2, triangles: 2, others: 1 }
+
+// enum FigurName {
+// 	Rect = "rect",
+// 	Circle = "circle",
+// 	Triangle = "triangle",
+// 	Line = "line",
+// }
+
+// interface Figur {
+// 	name: FigurName;
+// }
+
+// interface AmountOfFigures {
+// 	squares: number;
+// 	circles: number;
+// 	triangles: number;
+// 	others: number;
+// }
+
+// function calculateAmountOfFigures<T extends Figur>(figure: T[]): AmountOfFigures {
+// 	const amounth: AmountOfFigures = {
+// 		squares: 0,
+// 		circles: 0,
+// 		triangles: 0,
+// 		others: 0,
+// 	}
+
+// 	figure.forEach((figure) => {
+// 		switch (figure.name) {
+// 			case FigurName.Rect: amounth.squares++; break;
+// 			case FigurName.Circle: amounth.circles++; break;
+// 			case FigurName.Triangle: amounth.triangles++; break;
+// 			default: amounth.others++;
+// 		}
+// 	})
+
+// 	return amounth;
+// }
+
+// const data = [
+// 	{
+// 		name: FigurName.Rect,
+// 		data: { a: 5, b: 10 },
+// 	},
+// 	{
+// 		name: FigurName.Rect,
+// 		data: { a: 6, b: 11 },
+// 	},
+// 	{
+// 		name: FigurName.Triangle,
+// 		data: { a: 5, b: 10, c: 14 },
+// 	},
+// 	{
+// 		name: FigurName.Line,
+// 		data: { l: 15 },
+// 	},
+// 	{
+// 		name: FigurName.Circle,
+// 		data: { r: 10 },
+// 	},
+// 	{
+// 		name: FigurName.Circle,
+// 		data: { r: 5 },
+// 	},
+// 	{
+// 		name: FigurName.Rect,
+// 		data: { a: 15, b: 7 },
+// 	},
+// 	{
+// 		name: FigurName.Triangle,
+// 	},
+// ];
+
+// console.log(calculateAmountOfFigures(data));
+
+
+///////lesson 53
+interface IPhone {
+	company: string;
+	number: number;
 }
 
-const player1: PlayerData<string> = {
-	game: "CS:GO",
-	hours: 300,
-	server: "basic",
-};
+// IMobilePhone должен наследоваться от IPhone,
+// тип свойства companyPartner зависит от свойства company
 
-const player2: PlayerData<number> = {
-	game: 2048,
-	hours: "300 h.",
-	server: "arcade",
-};
-
-const player3: PlayerData<string> = {
-	game: "Chess",
-	hours: {
-		total: 500,
-		inMenu: 50,
-	},
-	server: "chess",
-};
-
-// Массив данных с фигурами содержит объекты, у каждого из которых обязательно есть свойство name
-// Каждый объект может еще содержать дополнительные свойства в случайном виде
-// Свойство name может иметь только 4 варианта
-// Функция calculateAmountOfFigures должна принимать массив с объектами, у которых обязательно должно быть свойство name
-// Возвращает она объект-экземпляр AmountOfFigures
-// Внутри себя подсчитывает сколько каких фигур было в массиве и записывает результаты в AmountOfFigures
-// С текущими данными в консоль должно попадать:
-// { squares: 3, circles: 2, triangles: 2, others: 1 }
-
-enum FigurName {
-	Rect = "rect",
-	Circle = "circle",
-	Triangle = "triangle",
-	Line = "line",
+interface IMobilePhone extends IPhone {
+	size: string;
+	companyPartner: IPhone["company"];
+	manufactured: Date;
 }
 
-interface Figur {
-	name: FigurName;
-}
+// Типизировать объект phones
 
-interface AmountOfFigures {
-	squares: number;
-	circles: number;
-	triangles: number;
-	others: number;
-}
-
-function calculateAmountOfFigures<T extends Figur>(figure: T[]): AmountOfFigures {
-	const amounth: AmountOfFigures = {
-		squares: 0,
-		circles: 0,
-		triangles: 0,
-		others: 0,
-	}
-
-	figure.forEach((figure) => {
-		switch (figure.name) {
-			case FigurName.Rect: amounth.squares++; break;
-			case FigurName.Circle: amounth.circles++; break;
-			case FigurName.Triangle: amounth.triangles++; break;
-			default: amounth.others++;
-		}
-	})
-
-	return amounth;
-}
-
-const data = [
+const phones: IMobilePhone[] = [
 	{
-		name: FigurName.Rect,
-		data: { a: 5, b: 10 },
+		company: "Nokia",
+		number: 1285637,
+		size: "5.5",
+		companyPartner: "MobileNokia",
+		manufactured: new Date("2022-09-01"),
 	},
 	{
-		name: FigurName.Rect,
-		data: { a: 6, b: 11 },
+		company: "Samsung",
+		number: 4356637,
+		size: "5.0",
+		companyPartner: "SamMobile",
+		manufactured: new Date("2021-11-05"),
 	},
 	{
-		name: FigurName.Triangle,
-		data: { a: 5, b: 10, c: 14 },
-	},
-	{
-		name: FigurName.Line,
-		data: { l: 15 },
-	},
-	{
-		name: FigurName.Circle,
-		data: { r: 10 },
-	},
-	{
-		name: FigurName.Circle,
-		data: { r: 5 },
-	},
-	{
-		name: FigurName.Rect,
-		data: { a: 15, b: 7 },
-	},
-	{
-		name: FigurName.Triangle,
+		company: "Apple",
+		number: 4552833,
+		size: "5.7",
+		companyPartner: "no data",
+		manufactured: new Date("2022-05-24T12:00:00"),
 	},
 ];
 
-console.log(calculateAmountOfFigures(data));
+interface IPhonesManufacturedAfterDate extends IMobilePhone {
+	InitialDate: string;
+}
 
+// Функция должна отфильтровать массив данных и вернуть новый массив
+// с телефонами, выпущенными после даты в третьем аргументе
 
+function filterPhonesByDate(
+	phones: IMobilePhone[],
+	key: keyof IMobilePhone,
+	initial: string
+): IPhonesManufacturedAfterDate[] {
+	return phones.filter((phone) => {
+		const manufactured = phone[key];
+		if(manufactured instanceof Date && manufactured.getTime() > new Date(initial).getTime()) {
+			return phone;
+		}
+	}).map((phone) => {
+		const newObject = { ...phone, InitialDate: initial }; 
+		return newObject;
+	})
+}
+
+// Второй аргумент при вызове функции должен быть связан с первым,
+// а значит мы получим подсказки - свойства этого объекта
+
+console.log(filterPhonesByDate(phones, "manufactured", "2022-01-01"));
