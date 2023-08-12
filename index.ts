@@ -625,194 +625,289 @@
 
 // Простыми словами: при добавлении свойства в целевой объект они должны быть
 // автоматически добавлены в зависимые (сразу подсказка от TS)
-interface IFitnessClass {
-	name: string;
-	startsAt: string;
-	duration: number;
-}
+// interface IFitnessClass {
+// 	name: string;
+// 	startsAt: string;
+// 	duration: number;
+// }
 
-interface IFutureClass extends Omit<IFitnessClass, "startsAt">{
-	willStartsAt: string;
-}
-
-
-interface IClient {
-	name: string;
-	age?: "-" | number;
-	gender?: "male" | "female";
-	timeLeft?: string;
-}
-
-interface ExClient extends IClient {
-	makeCallFor: Date;
-}
-
-interface FutureClient extends IClient {
-	makeCallFor: Date;
-}
-
-interface FitnessClub {
-	clubName: string;
-	location: string;
-	classes: IFitnessClass[];
-	futureClasses: IFutureClass[];
-	currClients: IClient[];
-	exClients: ExClient[];
-	futureClients: FutureClient[];
-}
+// interface IFutureClass extends Omit<IFitnessClass, "startsAt">{
+// 	willStartsAt: string;
+// }
 
 
-const fitnessClubCenter: FitnessClub = {
-	clubName: "Fitness club Center",
-	location: "central ave. 45, 5th floor",
-	classes: [
-		{
-			name: "yoga",
-			startsAt: "8:00 AM",
-			duration: 60,
-		},
-		{
-			name: "trx",
-			startsAt: "11:00 AM",
-			duration: 45,
-		},
-		{
-			name: "swimming",
-			startsAt: "3:00 PM",
-			duration: 70,
-		},
-	],
-	futureClasses: [
-		{
-			name: "boxing",
-			willStartsAt: "6:00 PM",
-			duration: 40,
-		},
-		{
-			name: "breath training",
-			willStartsAt: "8:00 PM",
-			duration: 30,
-		},
-	],
-	currClients: [
-		{
-			name: "John Smith",
-			age: "-",
-			gender: "male",
-			timeLeft: "1 month",
-		},
-		{
-			name: "Alise Smith",
-			age: 35,
-			gender: "female",
-			timeLeft: "3 month",
-		},
-		{
-			name: "Ann Sonne",
-			age: 24,
-			gender: "female",
-			timeLeft: "5 month",
-		},
-	],
-	exClients: [
-		{
-			name: "Tom Smooth",
-			age: 50,
-			gender: "male",
-			makeCallFor: new Date("2023-08-12"),
-		},
-	],
-	futureClients: [
-		{
-			name: "Maria",
-			makeCallFor: new Date("2023-07-10"),
-		},
-	],
-};
-//задачу решил, но нужно было использовать больше типов вместо оператора ? 
-//переделывать лень, но суть я знаю 
+// interface IClient {
+// 	name: string;
+// 	age?: "-" | number;
+// 	gender?: "male" | "female";
+// 	timeLeft?: string;
+// }
 
-/////////////////////////////////////////Задача со слайдером
-interface ISlider {
-	container?: string;
-	numberOfSlides?: number;
-	speed?: 300 | 500 | 700;
-	direction?: "horizontal" | "vertical";
-	dots?: boolean;
-	arrows?: boolean;
-	animationName?: string;
-}
+// interface ExClient extends IClient {
+// 	makeCallFor: Date;
+// }
 
-function createSlider({
-	container = "",
-	numberOfSlides = 1,
-	speed = 300,
-	direction = "horizontal",
-	dots = true,
-	arrows = true,
-}: ISlider = {}): void {
-	console.log(container, numberOfSlides, speed, direction, dots, arrows);
-}
+// interface FutureClient extends IClient {
+// 	makeCallFor: Date;
+// }
 
-createSlider();
-
-// Необходимо типизировать объект настроек, который будет зависим
-// от интерфейса ISlider
-// Все поля в нем обязательны для заполнения
-
-type TCustomSliderBase = Required<Omit<ISlider, "animationName" | "speed">>;
-//Required делает все свойства обязательными, Omit убирает некоторые
-interface ICustomSlider extends TCustomSliderBase {
-	speed: number;
-}
-
-const customSliderOptions: ICustomSlider = {
-	container: "id",
-	numberOfSlides: 4,
-	speed: 1100,
-	direction: "horizontal",
-	dots: true,
-	arrows: true,
-};
-
-function createCustomSlider(options: ICustomSlider): void {
-	if ("container" in options) {
-		console.log(options);
-	}
-}
+// interface FitnessClub {
+// 	clubName: string;
+// 	location: string;
+// 	classes: IFitnessClass[];
+// 	futureClasses: IFutureClass[];
+// 	currClients: IClient[];
+// 	exClients: ExClient[];
+// 	futureClients: FutureClient[];
+// }
 
 
-//////////////////////////////////////
-////////Задача с формами
-interface IForm {
-	login: string;
-	password: string;
-}
+// const fitnessClubCenter: FitnessClub = {
+// 	clubName: "Fitness club Center",
+// 	location: "central ave. 45, 5th floor",
+// 	classes: [
+// 		{
+// 			name: "yoga",
+// 			startsAt: "8:00 AM",
+// 			duration: 60,
+// 		},
+// 		{
+// 			name: "trx",
+// 			startsAt: "11:00 AM",
+// 			duration: 45,
+// 		},
+// 		{
+// 			name: "swimming",
+// 			startsAt: "3:00 PM",
+// 			duration: 70,
+// 		},
+// 	],
+// 	futureClasses: [
+// 		{
+// 			name: "boxing",
+// 			willStartsAt: "6:00 PM",
+// 			duration: 40,
+// 		},
+// 		{
+// 			name: "breath training",
+// 			willStartsAt: "8:00 PM",
+// 			duration: 30,
+// 		},
+// 	],
+// 	currClients: [
+// 		{
+// 			name: "John Smith",
+// 			age: "-",
+// 			gender: "male",
+// 			timeLeft: "1 month",
+// 		},
+// 		{
+// 			name: "Alise Smith",
+// 			age: 35,
+// 			gender: "female",
+// 			timeLeft: "3 month",
+// 		},
+// 		{
+// 			name: "Ann Sonne",
+// 			age: 24,
+// 			gender: "female",
+// 			timeLeft: "5 month",
+// 		},
+// 	],
+// 	exClients: [
+// 		{
+// 			name: "Tom Smooth",
+// 			age: 50,
+// 			gender: "male",
+// 			makeCallFor: new Date("2023-08-12"),
+// 		},
+// 	],
+// 	futureClients: [
+// 		{
+// 			name: "Maria",
+// 			makeCallFor: new Date("2023-07-10"),
+// 		},
+// 	],
+// };
+// //задачу решил, но нужно было использовать больше типов вместо оператора ? 
+// //переделывать лень, но суть я знаю 
 
-// Необходимо типизировать объект валидации
-// Учтите, что данные в форме могут расширяться и эти поля
-// должны появиться и в объекте валидации
+// /////////////////////////////////////////Задача со слайдером
+// interface ISlider {
+// 	container?: string;
+// 	numberOfSlides?: number;
+// 	speed?: 300 | 500 | 700;
+// 	direction?: "horizontal" | "vertical";
+// 	dots?: boolean;
+// 	arrows?: boolean;
+// 	animationName?: string;
+// }
 
-// type TValidationData = {
-// 	[key in keyof IForm]: {
-// 		isValid: boolean;
-// 		errorMsg?: string;
+// function createSlider({
+// 	container = "",
+// 	numberOfSlides = 1,
+// 	speed = 300,
+// 	direction = "horizontal",
+// 	dots = true,
+// 	arrows = true,
+// }: ISlider = {}): void {
+// 	console.log(container, numberOfSlides, speed, direction, dots, arrows);
+// }
+
+// createSlider();
+
+// // Необходимо типизировать объект настроек, который будет зависим
+// // от интерфейса ISlider
+// // Все поля в нем обязательны для заполнения
+
+// type TCustomSliderBase = Required<Omit<ISlider, "animationName" | "speed">>;
+// //Required делает все свойства обязательными, Omit убирает некоторые
+// interface ICustomSlider extends TCustomSliderBase {
+// 	speed: number;
+// }
+
+// const customSliderOptions: ICustomSlider = {
+// 	container: "id",
+// 	numberOfSlides: 4,
+// 	speed: 1100,
+// 	direction: "horizontal",
+// 	dots: true,
+// 	arrows: true,
+// };
+
+// function createCustomSlider(options: ICustomSlider): void {
+// 	if ("container" in options) {
+// 		console.log(options);
 // 	}
 // }
 
-const validationData: TValidation<IForm> = {
-	login: { isValid: false, errorMsg: "At least 3 characters" },
-	password: { isValid: true },
-};
 
-type TValidation<T> = {
-	[P in keyof T] : {
-		// isValid: boolean;
-		// errorMsg?: string;
+// //////////////////////////////////////
+// ////////Задача с формами
+// interface IForm {
+// 	login: string;
+// 	password: string;
+// }
 
-		isValid : true
-	} | {
-		isValid: false;
-		errorMsg: string;
-	}
+// // Необходимо типизировать объект валидации
+// // Учтите, что данные в форме могут расширяться и эти поля
+// // должны появиться и в объекте валидации
+
+// // type TValidationData = {
+// // 	[key in keyof IForm]: {
+// // 		isValid: boolean;
+// // 		errorMsg?: string;
+// // 	}
+// // }
+
+// const validationData: TValidation<IForm> = {
+// 	login: { isValid: false, errorMsg: "At least 3 characters" },
+// 	password: { isValid: true },
+// };
+
+// type TValidation<T> = {
+// 	[P in keyof T] : {
+// 		// isValid: boolean;
+// 		// errorMsg?: string;
+
+// 		isValid : true
+// 	} | {
+// 		isValid: false;
+// 		errorMsg: string;
+// 	}
+// }
+
+// class User {
+// 	login: string;
+// 	password: number;
+
+// 	constructor(login: string, password: number) {
+// 		this.login = login;
+// 		this.password = password;
+// 	}
+
+	
+// }
+
+// class AdminUser extends User {
+// 	role: string;
+// 	height: number = 1.8;
+// 	constructor(role: string, login: string) {
+// 		super(login, 123);
+// 		this.role = role;
+// 	}
+// }
+
+// new AdminUser("admin", "admin");
+
+enum TransferStatus {
+	Pending = "pending",
+	Rejected = "rejected",
+	Completed = "completed",
 }
+
+enum ErrorMessages {
+	NotFound = "Not found: 404",
+	NotEnoughSpace = "Not enough space: 507",
+	Forbidden = "Forbidden: 403",
+}
+
+interface ITransfer {
+	path: string;
+	data: string[];
+	date?: Date;
+	start: (p: string, d: string[]) => string;
+	stop: (reason: string) => string;
+}
+
+interface TransferError {
+	message: ErrorMessages;
+}
+
+// Класс должен имплементировать ITransfer и TransferError
+class SingleFileTransfer implements ITransfer, TransferError {
+	path!: string;
+	data!: string[];
+	date?: Date | undefined;
+	message!: ErrorMessages;
+    // Место для реализаций
+	start (p: string, d: string[]): string {
+		this.path = p;
+		this.data = d;
+		this.date = new Date();
+		return `Started transfer for path ${this.path}`;
+	}
+
+	stop (reason: string): string {
+		this.date = new Date();
+		return `Transfer stopped. Reason: ${reason}. Date: ${this.date}`;
+	}
+    // Необходимо создать метод checkTransferStatus, проверяющий состояние передачи данных
+    // Можно вывести в консоль данные, можно вернуть строку
+	checkTransferStatus(): string {
+		if (this.date) {
+			return `Transfer is running. Date: ${this.date}`;
+		}
+		return `Transfer is still pending.`;
+	}
+    // Необходимо создать метод, который будет останавливать передачу данных
+    // И возвращать строку с причиной и датой остановки (Дата в любом формате)
+
+	getStatusWithErrorMessage(errorMessage: ErrorMessages): string {
+		this.message = errorMessage;
+		return `Transfer status: ${this.getStatus()} - ${this.message}`;
+	}
+
+	private getStatus(): TransferStatus {
+		if (this.date) {
+			return TransferStatus.Completed;
+		} else {
+			return TransferStatus.Pending;
+		}
+	}
+    // Необходимо создать метод, который будет возвращать строку, содержащую
+    // Статус передачи и любое сообщение об ошибке. На ваш выбор или отталкиваться от приходящего аргумента
+    // Метод может показаться странным, но может использоваться для тестов, например
+
+}
+//нихуя не понял, в курсе нет объяснения этой задачи

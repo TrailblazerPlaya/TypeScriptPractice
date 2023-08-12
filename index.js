@@ -264,65 +264,416 @@
 // })
 //задачу решил, но нужно использовать больше интерфейсов и типов данных для более ясной структуры кода
 ///lesson42
-var forms = document.querySelectorAll("form");
-var emailInput = document.querySelector("#email");
-var titleInput = document.querySelector("#title");
-var textInput = document.querySelector("#text");
-var checkInput = document.querySelector("#check");
-var formData = {
-    email: "",
-    title: "",
-    text: "",
-    checkbox: false,
-};
-//методом перебора каждой формы происходит событие submit
-forms.forEach(function (form) {
-    form.addEventListener("submit", function (e) {
-        var _a, _b, _c, _d;
-        e.preventDefault();
-        // Можно и создавать другой объект для соблюдения иммутабельности, но пока не обязательно
-        formData.email = (_a = emailInput === null || emailInput === void 0 ? void 0 : emailInput.value) !== null && _a !== void 0 ? _a : "";
-        formData.title = (_b = titleInput === null || titleInput === void 0 ? void 0 : titleInput.value) !== null && _b !== void 0 ? _b : "";
-        formData.text = (_c = textInput === null || textInput === void 0 ? void 0 : textInput.value) !== null && _c !== void 0 ? _c : "";
-        formData.checkbox = (_d = checkInput === null || checkInput === void 0 ? void 0 : checkInput.checked) !== null && _d !== void 0 ? _d : false;
-        if (validateFormData(formData)) {
-            checkFormData(formData);
-        }
-    });
-    // Последовательность действий:
-    // 1) Происходит submit любой из форм
-    // 2) Все данные из 4х полей со страницы переходят в свойства объекта formData
-    // 3) Запускается функция validateFormData с этим объектом, возвращает true/false
-    // 4) Если на предыдущем этапе true, то запускается функция checkFormData с этим объектом
-    function validateFormData(data) {
-        // Если каждое из свойств объекта data заполнено
-        if (Object.values(data).every(function (value) { return value !== ""; })) {
-            return true;
-        }
-        else {
-            console.log("Please, complete all fields");
-            return false;
-        }
-    }
-    function checkFormData(data) {
-        var email = data.email;
-        var emails = ["example@gmail.com", "example@ex.com", "admin@gmail.com"];
-        // Если email совпадает хотя бы с одним из массива
-        if (emails.some(function (e) { return e === email; })) {
-            console.log("This email is already exist");
-        }
-        else {
-            console.log("Posting data...");
-        }
-    }
-    //с задачей не справился, не знал как записывать данные в объект formData
-    //submit кнопку не нужно было получать, так как её тип уже submit 
-    //нужно побольше узнать о методах взаимодействия с объектом и как их использовать
-    //ну в общем я запомнил как пушить данные в объект с инпута
-    //не справился, ну бывает 0.о
-});
+// const forms = document.querySelectorAll("form");
+// const emailInput = document.querySelector("#email") as HTMLInputElement;
+// const titleInput = document.querySelector("#title") as HTMLInputElement;
+// const textInput = document.querySelector("#text") as HTMLInputElement;
+// const checkInput = document.querySelector("#check") as HTMLInputElement;
+// // const submitButton = document.querySelector(".btn") as HTMLButtonElement;
+// //для начала нужно создать interface для этого объекта, буква I в начале обозначает интерфейс
+// interface IFormData {
+// 	email: string;
+// 	title: string;
+// 	text: string;
+// 	checkbox: boolean;
+// }
+// const formData: IFormData = {
+// 	email: "",
+// 	title: "",
+// 	text: "",
+// 	checkbox: false,
+// };
+// //методом перебора каждой формы происходит событие submit
+// forms.forEach((form) => {
+// 	form.addEventListener("submit", (e) => {
+// 		e.preventDefault();
+// 	// Можно и создавать другой объект для соблюдения иммутабельности, но пока не обязательно
+// 	formData.email = emailInput?.value ?? "";
+// 	formData.title = titleInput?.value ?? "";
+// 	formData.text = textInput?.value ?? "";
+// 	formData.checkbox = checkInput?.checked ?? false;
+// 	if (validateFormData(formData)) {
+// 		checkFormData(formData);
+// 	}
+// })
+// // Последовательность действий:
+// // 1) Происходит submit любой из форм
+// // 2) Все данные из 4х полей со страницы переходят в свойства объекта formData
+// // 3) Запускается функция validateFormData с этим объектом, возвращает true/false
+// // 4) Если на предыдущем этапе true, то запускается функция checkFormData с этим объектом
+// function validateFormData(data: IFormData): boolean  {
+// 	// Если каждое из свойств объекта data заполнено
+// 	if (Object.values(data).every((value) => value!== "")) {
+// 		return true;
+// 	} else {
+// 		console.log("Please, complete all fields");
+// 		return false;
+// 	}
+// }
+// function checkFormData(data: IFormData) {
+// 	const { email } = data;
+// 	const emails = ["example@gmail.com", "example@ex.com", "admin@gmail.com"];
+// 	// Если email совпадает хотя бы с одним из массива
+// 	if (emails.some((e) => e === email)) {
+// 		console.log("This email is already exist");
+// 	} else {
+// 		console.log("Posting data...");
+// 	}
+// }
 //с задачей не справился, не знал как записывать данные в объект formData
 //submit кнопку не нужно было получать, так как её тип уже submit 
 //нужно побольше узнать о методах взаимодействия с объектом и как их использовать
 //ну в общем я запомнил как пушить данные в объект с инпута
 //не справился, ну бывает 0.о
+/////////////////////////////////////////////////Generics 
+/////////lesson44
+// function processingData <T, A>(data: T[], options: A): string {
+// 	data.length;
+// 	switch(typeof data) {
+// 		case "string": 
+// 			return `${data}, ${options}`;
+// 			break;
+// 		case "number":
+// 			return `${data.toFixed()}, speed: ${options} `;	
+// 			break;
+// 		default:
+// 			return "Unknown type";		
+// 	}		
+// }
+// let res1 = processingData(['sss'], 1);
+// let res2 = processingData([5], 'sss');
+// let res3 = processingData<number, string>([22], 's2qq');
+//////////////lesson47
+// Создать Generic-интерфейс PlayerData, который подходил бы для создания таких объектов:
+// interface PlayerData<T> {
+// 	game: T;
+// 	hours: number | string | {total: number, inMenu: number};
+// 	server: string;
+// }
+// const player1: PlayerData<string> = {
+// 	game: "CS:GO",
+// 	hours: 300,
+// 	server: "basic",
+// };
+// const player2: PlayerData<number> = {
+// 	game: 2048,
+// 	hours: "300 h.",
+// 	server: "arcade",
+// };
+// const player3: PlayerData<string> = {
+// 	game: "Chess",
+// 	hours: {
+// 		total: 500,
+// 		inMenu: 50,
+// 	},
+// 	server: "chess",
+// };
+// // Массив данных с фигурами содержит объекты, у каждого из которых обязательно есть свойство name
+// // Каждый объект может еще содержать дополнительные свойства в случайном виде
+// // Свойство name может иметь только 4 варианта
+// // Функция calculateAmountOfFigures должна принимать массив с объектами, у которых обязательно должно быть свойство name
+// // Возвращает она объект-экземпляр AmountOfFigures
+// // Внутри себя подсчитывает сколько каких фигур было в массиве и записывает результаты в AmountOfFigures
+// // С текущими данными в консоль должно попадать:
+// // { squares: 3, circles: 2, triangles: 2, others: 1 }
+// enum FigurName {
+// 	Rect = "rect",
+// 	Circle = "circle",
+// 	Triangle = "triangle",
+// 	Line = "line",
+// }
+// interface Figur {
+// 	name: FigurName;
+// }
+// interface AmountOfFigures {
+// 	squares: number;
+// 	circles: number;
+// 	triangles: number;
+// 	others: number;
+// }
+// function calculateAmountOfFigures<T extends Figur>(figure: T[]): AmountOfFigures {
+// 	const amounth: AmountOfFigures = {
+// 		squares: 0,
+// 		circles: 0,
+// 		triangles: 0,
+// 		others: 0,
+// 	}
+// 	figure.forEach((figure) => {
+// 		switch (figure.name) {
+// 			case FigurName.Rect: amounth.squares++; break;
+// 			case FigurName.Circle: amounth.circles++; break;
+// 			case FigurName.Triangle: amounth.triangles++; break;
+// 			default: amounth.others++;
+// 		}
+// 	})
+// 	return amounth;
+// }
+// const data = [
+// 	{
+// 		name: FigurName.Rect,
+// 		data: { a: 5, b: 10 },
+// 	},
+// 	{
+// 		name: FigurName.Rect,
+// 		data: { a: 6, b: 11 },
+// 	},
+// 	{
+// 		name: FigurName.Triangle,
+// 		data: { a: 5, b: 10, c: 14 },
+// 	},
+// 	{
+// 		name: FigurName.Line,
+// 		data: { l: 15 },
+// 	},
+// 	{
+// 		name: FigurName.Circle,
+// 		data: { r: 10 },
+// 	},
+// 	{
+// 		name: FigurName.Circle,
+// 		data: { r: 5 },
+// 	},
+// 	{
+// 		name: FigurName.Rect,
+// 		data: { a: 15, b: 7 },
+// 	},
+// 	{
+// 		name: FigurName.Triangle,
+// 	},
+// ];
+// console.log(calculateAmountOfFigures(data));
+///////lesson 53
+// interface IPhone {
+// 	company: string;
+// 	number: number;
+// }
+// // IMobilePhone должен наследоваться от IPhone,
+// // тип свойства companyPartner зависит от свойства company
+// interface IMobilePhone extends IPhone {
+// 	size: string;
+// 	companyPartner: IPhone["company"];
+// 	manufactured: Date;
+// }
+// // Типизировать объект phones
+// const phones: IMobilePhone[] = [
+// 	{
+// 		company: "Nokia",
+// 		number: 1285637,
+// 		size: "5.5",
+// 		companyPartner: "MobileNokia",
+// 		manufactured: new Date("2022-09-01"),
+// 	},
+// 	{
+// 		company: "Samsung",
+// 		number: 4356637,
+// 		size: "5.0",
+// 		companyPartner: "SamMobile",
+// 		manufactured: new Date("2021-11-05"),
+// 	},
+// 	{
+// 		company: "Apple",
+// 		number: 4552833,
+// 		size: "5.7",
+// 		companyPartner: "no data",
+// 		manufactured: new Date("2022-05-24T12:00:00"),
+// 	},
+// ];
+// interface IPhonesManufacturedAfterDate extends IMobilePhone {
+// 	InitialDate: string;
+// }
+// // Функция должна отфильтровать массив данных и вернуть новый массив
+// // с телефонами, выпущенными после даты в третьем аргументе
+// function filterPhonesByDate(
+// 	phones: IMobilePhone[],
+// 	key: keyof IMobilePhone,
+// 	initial: string
+// ): IPhonesManufacturedAfterDate[] {
+// 	return phones.filter((phone) => {
+// 		const manufactured = phone[key];
+// 		if(manufactured instanceof Date && manufactured.getTime() > new Date(initial).getTime()) {
+// 			return phone;
+// 		}
+// 	}).map((phone) => {
+// 		const newObject = { ...phone, InitialDate: initial }; 
+// 		return newObject;
+// 	})
+// }
+// // Второй аргумент при вызове функции должен быть связан с первым,
+// // а значит мы получим подсказки - свойства этого объекта
+// console.log(filterPhonesByDate(phones, "manufactured", "2022-01-01"));
+///lesson 59
+// Необходимо типизировать этот большой объект
+// Свойство futureClasses должно быть в зависимости от classes по типу
+// Свойства exClients и futureClients тоже должны быть в зависимости от currClients
+// ИЛИ все три зависят от общего родителя
+// Простыми словами: при добавлении свойства в целевой объект они должны быть
+// автоматически добавлены в зависимые (сразу подсказка от TS)
+// interface IFitnessClass {
+// 	name: string;
+// 	startsAt: string;
+// 	duration: number;
+// }
+// interface IFutureClass extends Omit<IFitnessClass, "startsAt">{
+// 	willStartsAt: string;
+// }
+// interface IClient {
+// 	name: string;
+// 	age?: "-" | number;
+// 	gender?: "male" | "female";
+// 	timeLeft?: string;
+// }
+// interface ExClient extends IClient {
+// 	makeCallFor: Date;
+// }
+// interface FutureClient extends IClient {
+// 	makeCallFor: Date;
+// }
+// interface FitnessClub {
+// 	clubName: string;
+// 	location: string;
+// 	classes: IFitnessClass[];
+// 	futureClasses: IFutureClass[];
+// 	currClients: IClient[];
+// 	exClients: ExClient[];
+// 	futureClients: FutureClient[];
+// }
+// const fitnessClubCenter: FitnessClub = {
+// 	clubName: "Fitness club Center",
+// 	location: "central ave. 45, 5th floor",
+// 	classes: [
+// 		{
+// 			name: "yoga",
+// 			startsAt: "8:00 AM",
+// 			duration: 60,
+// 		},
+// 		{
+// 			name: "trx",
+// 			startsAt: "11:00 AM",
+// 			duration: 45,
+// 		},
+// 		{
+// 			name: "swimming",
+// 			startsAt: "3:00 PM",
+// 			duration: 70,
+// 		},
+// 	],
+// 	futureClasses: [
+// 		{
+// 			name: "boxing",
+// 			willStartsAt: "6:00 PM",
+// 			duration: 40,
+// 		},
+// 		{
+// 			name: "breath training",
+// 			willStartsAt: "8:00 PM",
+// 			duration: 30,
+// 		},
+// 	],
+// 	currClients: [
+// 		{
+// 			name: "John Smith",
+// 			age: "-",
+// 			gender: "male",
+// 			timeLeft: "1 month",
+// 		},
+// 		{
+// 			name: "Alise Smith",
+// 			age: 35,
+// 			gender: "female",
+// 			timeLeft: "3 month",
+// 		},
+// 		{
+// 			name: "Ann Sonne",
+// 			age: 24,
+// 			gender: "female",
+// 			timeLeft: "5 month",
+// 		},
+// 	],
+// 	exClients: [
+// 		{
+// 			name: "Tom Smooth",
+// 			age: 50,
+// 			gender: "male",
+// 			makeCallFor: new Date("2023-08-12"),
+// 		},
+// 	],
+// 	futureClients: [
+// 		{
+// 			name: "Maria",
+// 			makeCallFor: new Date("2023-07-10"),
+// 		},
+// 	],
+// };
+// //задачу решил, но нужно было использовать больше типов вместо оператора ? 
+// //переделывать лень, но суть я знаю 
+// /////////////////////////////////////////Задача со слайдером
+// interface ISlider {
+// 	container?: string;
+// 	numberOfSlides?: number;
+// 	speed?: 300 | 500 | 700;
+// 	direction?: "horizontal" | "vertical";
+// 	dots?: boolean;
+// 	arrows?: boolean;
+// 	animationName?: string;
+// }
+// function createSlider({
+// 	container = "",
+// 	numberOfSlides = 1,
+// 	speed = 300,
+// 	direction = "horizontal",
+// 	dots = true,
+// 	arrows = true,
+// }: ISlider = {}): void {
+// 	console.log(container, numberOfSlides, speed, direction, dots, arrows);
+// }
+// createSlider();
+// // Необходимо типизировать объект настроек, который будет зависим
+// // от интерфейса ISlider
+// // Все поля в нем обязательны для заполнения
+// type TCustomSliderBase = Required<Omit<ISlider, "animationName" | "speed">>;
+// //Required делает все свойства обязательными, Omit убирает некоторые
+// interface ICustomSlider extends TCustomSliderBase {
+// 	speed: number;
+// }
+// const customSliderOptions: ICustomSlider = {
+// 	container: "id",
+// 	numberOfSlides: 4,
+// 	speed: 1100,
+// 	direction: "horizontal",
+// 	dots: true,
+// 	arrows: true,
+// };
+// function createCustomSlider(options: ICustomSlider): void {
+// 	if ("container" in options) {
+// 		console.log(options);
+// 	}
+// }
+// //////////////////////////////////////
+// ////////Задача с формами
+// interface IForm {
+// 	login: string;
+// 	password: string;
+// }
+// // Необходимо типизировать объект валидации
+// // Учтите, что данные в форме могут расширяться и эти поля
+// // должны появиться и в объекте валидации
+// // type TValidationData = {
+// // 	[key in keyof IForm]: {
+// // 		isValid: boolean;
+// // 		errorMsg?: string;
+// // 	}
+// // }
+// const validationData: TValidation<IForm> = {
+// 	login: { isValid: false, errorMsg: "At least 3 characters" },
+// 	password: { isValid: true },
+// };
+// type TValidation<T> = {
+// 	[P in keyof T] : {
+// 		// isValid: boolean;
+// 		// errorMsg?: string;
+// 		isValid : true
+// 	} | {
+// 		isValid: false;
+// 		errorMsg: string;
+// 	}
+// }
