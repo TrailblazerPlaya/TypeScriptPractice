@@ -925,6 +925,9 @@ class Player {
 	public server: string;
 	protected consent: boolean;
 
+	constructor(login: string) {
+		this.#login = login;
+	}
 
 	//private constructor (){//это позволяет запретить создание экземпляров класса
 		//это нужно если в классе одни статичные свойства
@@ -939,23 +942,61 @@ class Player {
 		this._password = value;
 	}
 
+	logIn = (/*this: Player*/) => {
+		return `Player ${this.#login} logged in`;
+	}
+
 	static getGameName() {
 		return Player.game;
 	}
+
+
+	connect () {
+		//Do smth
+		return this;
+	}
+
+
+	isPro(): this is CompetitivePlayer {
+		return this instanceof CompetitivePlayer;
+	}
 }
 
-console.log(Player.getGameName());
+const player = new Player("test");
+// console.log(player.logIn());
+console.log(player.connect().logIn());//вот таким образом свойство connect возвращает контекст, то есть возвратитс просто player и мы можем использовать повторно его методы |chaining
+
+// const test = player.logIn.bind(player);//привязываем жестко контекст к экземпляру
+const test = player.logIn;//это вариант с использованием стрелочной функции в методе logIn
+test();
+
+// console.log(Player.getGameName());
 
 class CompetitivePlayer extends Player {
 	rank: number;
+
+	checkLogin() {
+		// return super.logIn();//когда мы использовали стрелочную функцию, то мы не можем использовать super
+		//она не записывается в prototype
+
+
+		return this.logIn();
+	}
 
 	isConsented() {
 		this.consent ? "yes" : "No";
 	}
 }
 
-const player = new CompetitivePlayer();
-player.password = "123";
+
+const player2 = new CompetitivePlayer('test2');
+console.log(player2.checkLogin());
+
+const somePlayer: Player | CompetitivePlayer = new CompetitivePlayer('test3');
+somePlayer.isPro() ? console.log(somePlayer) : console.log(somePlayer);
+
+// const player = new CompetitivePlayer();
+// player.password = "123";
 // class User {
 // 	email: string;
 // 	password: string;
@@ -965,6 +1006,7 @@ player.password = "123";
 // 	}
 // }
 
-class User {//такая запись заменяет длинную запись как выше
-	constructor(public email: string, public password: string) {}
-}
+// class User {//такая запись заменяет длинную запись как выше
+// 	constructor(public email: string, public password: string) {}
+// }
+
