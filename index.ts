@@ -916,84 +916,84 @@
 
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////lesson 71
-class Player {
-	private static game: string = "COD";
+// class Player {
+// 	private static game: string = "COD";
 
 
-	#login: string; //синтаксис приватного свойства из обычного js
-	private _password: string;
-	public server: string;
-	protected consent: boolean;
+// 	#login: string; //синтаксис приватного свойства из обычного js
+// 	private _password: string;
+// 	public server: string;
+// 	protected consent: boolean;
 
-	constructor(login: string) {
-		this.#login = login;
-	}
+// 	constructor(login: string) {
+// 		this.#login = login;
+// 	}
 
-	//private constructor (){//это позволяет запретить создание экземпляров класса
-		//это нужно если в классе одни статичные свойства
-	//}
+// 	//private constructor (){//это позволяет запретить создание экземпляров класса
+// 		//это нужно если в классе одни статичные свойства
+// 	//}
 
-	get password () {
-		return this._password;
-	}
+// 	get password () {
+// 		return this._password;
+// 	}
 
-	set password (value: string) {
-		//ну вообще тут не просто помещение нового пароля, тут должна быть валидация(проверка на соответсвие)
-		this._password = value;
-	}
+// 	set password (value: string) {
+// 		//ну вообще тут не просто помещение нового пароля, тут должна быть валидация(проверка на соответсвие)
+// 		this._password = value;
+// 	}
 
-	logIn = (/*this: Player*/) => {
-		return `Player ${this.#login} logged in`;
-	}
+// 	logIn = (/*this: Player*/) => {
+// 		return `Player ${this.#login} logged in`;
+// 	}
 
-	static getGameName() {
-		return Player.game;
-	}
-
-
-	connect () {
-		//Do smth
-		return this;
-	}
+// 	static getGameName() {
+// 		return Player.game;
+// 	}
 
 
-	isPro(): this is CompetitivePlayer {
-		return this instanceof CompetitivePlayer;
-	}
-}
-
-const player = new Player("test");
-// console.log(player.logIn());
-console.log(player.connect().logIn());//вот таким образом свойство connect возвращает контекст, то есть возвратитс просто player и мы можем использовать повторно его методы |chaining
-
-// const test = player.logIn.bind(player);//привязываем жестко контекст к экземпляру
-const test = player.logIn;//это вариант с использованием стрелочной функции в методе logIn
-test();
-
-// console.log(Player.getGameName());
-
-class CompetitivePlayer extends Player {
-	rank: number;
-
-	checkLogin() {
-		// return super.logIn();//когда мы использовали стрелочную функцию, то мы не можем использовать super
-		//она не записывается в prototype
+// 	connect () {
+// 		//Do smth
+// 		return this;
+// 	}
 
 
-		return this.logIn();
-	}
+// 	isPro(): this is CompetitivePlayer {
+// 		return this instanceof CompetitivePlayer;
+// 	}
+// }
 
-	isConsented() {
-		this.consent ? "yes" : "No";
-	}
-}
+// const player = new Player("test");
+// // console.log(player.logIn());
+// console.log(player.connect().logIn());//вот таким образом свойство connect возвращает контекст, то есть возвратитс просто player и мы можем использовать повторно его методы |chaining
+
+// // const test = player.logIn.bind(player);//привязываем жестко контекст к экземпляру
+// const test = player.logIn;//это вариант с использованием стрелочной функции в методе logIn
+// test();
+
+// // console.log(Player.getGameName());
+
+// class CompetitivePlayer extends Player {
+// 	rank: number;
+
+// 	checkLogin() {
+// 		// return super.logIn();//когда мы использовали стрелочную функцию, то мы не можем использовать super
+// 		//она не записывается в prototype
 
 
-const player2 = new CompetitivePlayer('test2');
-console.log(player2.checkLogin());
+// 		return this.logIn();
+// 	}
 
-const somePlayer: Player | CompetitivePlayer = new CompetitivePlayer('test3');
-somePlayer.isPro() ? console.log(somePlayer) : console.log(somePlayer);
+// 	isConsented() {
+// 		this.consent ? "yes" : "No";
+// 	}
+// }
+
+
+// const player2 = new CompetitivePlayer('test2');
+// console.log(player2.checkLogin());
+
+// const somePlayer: Player | CompetitivePlayer = new CompetitivePlayer('test3');
+// somePlayer.isPro() ? console.log(somePlayer) : console.log(somePlayer);
 
 // const player = new CompetitivePlayer();
 // player.password = "123";
@@ -1010,3 +1010,27 @@ somePlayer.isPro() ? console.log(somePlayer) : console.log(somePlayer);
 // 	constructor(public email: string, public password: string) {}
 // }
 
+
+////lesson 75
+interface IEngine {
+	model: string;
+	capacity: number;
+	startEngine: (time: Date) => string;
+}
+
+abstract class AbstractVehicle {
+	model: string;
+	capacity: number;
+	abstract startEngine: (time: Date) => string;
+	stopEngine(time: Date): string	{
+		return "Stop";
+	}
+}
+
+class Vehicle extends AbstractVehicle {
+	startEngine = (time: Date) => {
+		return "Start";
+	};
+}
+
+new Vehicle();
