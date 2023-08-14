@@ -840,74 +840,131 @@
 
 // new AdminUser("admin", "admin");
 
-enum TransferStatus {
-	Pending = "pending",
-	Rejected = "rejected",
-	Completed = "completed",
-}
+// enum TransferStatus {
+// 	Pending = "pending",
+// 	Rejected = "rejected",
+// 	Completed = "completed",
+// }
 
-enum ErrorMessages {
-	NotFound = "Not found: 404",
-	NotEnoughSpace = "Not enough space: 507",
-	Forbidden = "Forbidden: 403",
-}
+// enum ErrorMessages {
+// 	NotFound = "Not found: 404",
+// 	NotEnoughSpace = "Not enough space: 507",
+// 	Forbidden = "Forbidden: 403",
+// }
 
-interface ITransfer {
-	path: string;
-	data: string[];
-	date?: Date;
-	start: (p: string, d: string[]) => string;
-	stop: (reason: string) => string;
-}
+// interface ITransfer {
+// 	path: string;
+// 	data: string[];
+// 	date?: Date;
+// 	start: (p: string, d: string[]) => string;
+// 	stop: (reason: string) => string;
+// }
 
-interface TransferError {
-	message: ErrorMessages;
-}
+// interface TransferError {
+// 	message: ErrorMessages;
+// }
 
-// Класс должен имплементировать ITransfer и TransferError
-class SingleFileTransfer implements ITransfer, TransferError {
-	path!: string;
-	data!: string[];
-	date?: Date | undefined;
-	message!: ErrorMessages;
-    // Место для реализаций
-	start (p: string, d: string[]): string {
-		this.path = p;
-		this.data = d;
-		this.date = new Date();
-		return `Started transfer for path ${this.path}`;
-	}
+// // Класс должен имплементировать ITransfer и TransferError
+// class SingleFileTransfer implements ITransfer, TransferError {
+// 	path!: string;
+// 	data!: string[];
+// 	date?: Date | undefined;
+// 	message!: ErrorMessages;
+//     // Место для реализаций
+// 	start (p: string, d: string[]): string {
+// 		this.path = p;
+// 		this.data = d;
+// 		this.date = new Date();
+// 		return `Started transfer for path ${this.path}`;
+// 	}
 
-	stop (reason: string): string {
-		this.date = new Date();
-		return `Transfer stopped. Reason: ${reason}. Date: ${this.date}`;
-	}
-    // Необходимо создать метод checkTransferStatus, проверяющий состояние передачи данных
-    // Можно вывести в консоль данные, можно вернуть строку
-	checkTransferStatus(): string {
-		if (this.date) {
-			return `Transfer is running. Date: ${this.date}`;
-		}
-		return `Transfer is still pending.`;
-	}
-    // Необходимо создать метод, который будет останавливать передачу данных
-    // И возвращать строку с причиной и датой остановки (Дата в любом формате)
+// 	stop (reason: string): string {
+// 		this.date = new Date();
+// 		return `Transfer stopped. Reason: ${reason}. Date: ${this.date}`;
+// 	}
+//     // Необходимо создать метод checkTransferStatus, проверяющий состояние передачи данных
+//     // Можно вывести в консоль данные, можно вернуть строку
+// 	checkTransferStatus(): string {
+// 		if (this.date) {
+// 			return `Transfer is running. Date: ${this.date}`;
+// 		}
+// 		return `Transfer is still pending.`;
+// 	}
+//     // Необходимо создать метод, который будет останавливать передачу данных
+//     // И возвращать строку с причиной и датой остановки (Дата в любом формате)
 
-	getStatusWithErrorMessage(errorMessage: ErrorMessages): string {
-		this.message = errorMessage;
-		return `Transfer status: ${this.getStatus()} - ${this.message}`;
-	}
+// 	getStatusWithErrorMessage(errorMessage: ErrorMessages): string {
+// 		this.message = errorMessage;
+// 		return `Transfer status: ${this.getStatus()} - ${this.message}`;
+// 	}
 
-	private getStatus(): TransferStatus {
-		if (this.date) {
-			return TransferStatus.Completed;
-		} else {
-			return TransferStatus.Pending;
-		}
-	}
-    // Необходимо создать метод, который будет возвращать строку, содержащую
-    // Статус передачи и любое сообщение об ошибке. На ваш выбор или отталкиваться от приходящего аргумента
-    // Метод может показаться странным, но может использоваться для тестов, например
+// 	private getStatus(): TransferStatus {
+// 		if (this.date) {
+// 			return TransferStatus.Completed;
+// 		} else {
+// 			return TransferStatus.Pending;
+// 		}
+// 	}
+//     // Необходимо создать метод, который будет возвращать строку, содержащую
+//     // Статус передачи и любое сообщение об ошибке. На ваш выбор или отталкиваться от приходящего аргумента
+//     // Метод может показаться странным, но может использоваться для тестов, например
 
-}
+// }
 //нихуя не понял, в курсе нет объяснения этой задачи
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+//////////////////////lesson 71
+class Player {
+	private static game: string = "COD";
+
+
+	#login: string; //синтаксис приватного свойства из обычного js
+	private _password: string;
+	public server: string;
+	protected consent: boolean;
+
+
+	//private constructor (){//это позволяет запретить создание экземпляров класса
+		//это нужно если в классе одни статичные свойства
+	//}
+
+	get password () {
+		return this._password;
+	}
+
+	set password (value: string) {
+		//ну вообще тут не просто помещение нового пароля, тут должна быть валидация(проверка на соответсвие)
+		this._password = value;
+	}
+
+	static getGameName() {
+		return Player.game;
+	}
+}
+
+console.log(Player.getGameName());
+
+class CompetitivePlayer extends Player {
+	rank: number;
+
+	isConsented() {
+		this.consent ? "yes" : "No";
+	}
+}
+
+const player = new CompetitivePlayer();
+player.password = "123";
+// class User {
+// 	email: string;
+// 	password: string;
+// 	constructor(email: string, password: string) {
+// 		this.email = email;
+// 		this.password = password;
+// 	}
+// }
+
+class User {//такая запись заменяет длинную запись как выше
+	constructor(public email: string, public password: string) {}
+}
