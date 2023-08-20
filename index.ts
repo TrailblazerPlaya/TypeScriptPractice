@@ -1,64 +1,35 @@
-interface IPayment {
-	sum: number;
-	from: number;
-	to: number;
-}
+class User {
+    skills: string[];
+    addSkill(skill: string): void;
+    addSkill(skills: string[]): void;
+    // addSkill(skill: string): void {}; я добавил в конец скобки и у меня была ошибка
+    // addSkill(skills: string[]): void {};
+    addSkill(skillOrSkills: string | string[]): void {
+        if (typeof skillOrSkills == 'string') {
+            this.skills.push(skillOrSkills);
+        } else {
+            this.skills.concat(skillOrSkills);
+        }
 
-enum PaymentStatus {
-	Success = 'success',
-	Failed = 'failed',
-}
-
-interface IPaymentRequest extends IPayment { }
-
-interface IDataSuccess extends IPayment {
-	databaseId: number;
-}
-
-interface IDataFailed {
-	errorMessage: string;
-	errorCode: number;
-}
-
-interface IResponseSuccess {
-	status: PaymentStatus.Success;
-	data: IDataSuccess;
-}
-
-interface IResponseFailed {
-	status: PaymentStatus.Failed;
-	data: IDataFailed;
-}
-
-function isResponseSuccess(response: IResponseSuccess | IResponseFailed): response is IResponseSuccess {
-    return response.status === PaymentStatus.Success;
-}
-
-function processResponse(response: IResponseSuccess | IResponseFailed) {
-    if (isResponseSuccess(response)) {
-        console.log('Успешный платеж', PaymentStatus.Success);
-    } else {
-        console.log(PaymentStatus.Failed);
     }
+        
+    
 }
 
-const successResponse: IResponseSuccess = {
-    status: PaymentStatus.Success,
-    data: {
-        sum: 100,
-        from: 1,
-        to: 2,
-        databaseId: 1,
-    },
-}
+new User().addSkill(['js', 'ts']);
 
-const failedResponse: IResponseFailed = {
-    status: PaymentStatus.Failed,
-    data: {
-        errorMessage: 'Error',
-        errorCode: 1,
-    },
-}
 
-processResponse(successResponse);
-processResponse(failedResponse);
+
+class Calculator {
+    add(a: number, b: number): number;
+    add(a: string, b: string): string;
+    add(a: any, b: any): any {
+      if (typeof a === 'number' && typeof b === 'number') {
+        return a + b;
+      } else if (typeof a === 'string' && typeof b === 'string') {
+        return a.concat(b);
+      } else {
+        throw new Error('Invalid arguments');
+      }
+    }
+  }
