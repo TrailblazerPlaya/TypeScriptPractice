@@ -1,57 +1,47 @@
-/*Необходимо сделать корзину (Cart) на сайте,
-которая имееет список продуктов (Product), добавленных в корзину
-и переметры доставки (Delivery). Для Cart реализовать методы:
-- Добавить продукт в корзину
-- Удалить продукт из корзины по ID
-- Посчитать стоимость товаров в корзине
-- Задать доставку
-- Checkout - вернуть что всё ок, если есть продукты и параметры доставки
-Product: id, название и цена
-Delivery: может быть как до дома (дата и адрес) или до пункта выдачи (дата = Сегодня и Id магазина)*/
-var Product = /** @class */ (function () {
-    function Product(id, name, price) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+// Необходимо реализовать абстрактный класс Logger с 2-мя методами
+// абстрактным - log(message): void
+// printDate - выводящий в log дату
+// К нему необходимо сделать реальный класс, который бы имел метод: logWithDate,
+// выводящий сначала дату, а потом заданное сообщение
+var Logger = /** @class */ (function () {
+    function Logger() {
     }
-    return Product;
+    Logger.prototype.printDate = function (date) {
+        this.log(date.toString());
+    };
+    ;
+    return Logger;
 }());
-var Delivery = /** @class */ (function () {
-    function Delivery(date, address, storeId) {
-        this.date = date;
-        this.address = address;
-        this.storeId = storeId;
+var ConsoleLogger = /** @class */ (function (_super) {
+    __extends(ConsoleLogger, _super);
+    function ConsoleLogger() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    return Delivery;
-}());
-var Card = /** @class */ (function () {
-    function Card() {
-        this.product = [];
-    }
-    Card.prototype.addProduct = function (product) {
-        this.product.push(product);
-        console.log('Product added');
+    ConsoleLogger.prototype.log = function (message) {
+        console.log(message);
     };
-    Card.prototype.removeProductById = function (id) {
-        this.product = this.product.filter(function (product) { return product.id !== id; });
+    // printDate(): void {
+    //     console.log(new Date());
+    // }
+    ConsoleLogger.prototype.logWithDate = function (date, message) {
+        this.printDate(date);
+        this.log(message);
     };
-    Card.prototype.calculateTotalPrice = function () {
-        return this.product.reduce(function (total, product) { return total + product.price; }, 0);
-    };
-    Card.prototype.setDelivery = function (delivery) {
-        this.delivery = delivery;
-        console.log('Delivery set');
-    };
-    Card.prototype.checkout = function () {
-        return this.product.length > 0 && this.delivery !== undefined;
-    };
-    return Card;
-}());
-var product1 = new Product(1, "Product 1", 100);
-var product2 = new Product(2, "Product 2", 200);
-var delivery1 = new Delivery(new Date('2023-08-21'), 'Address 1');
-var delivery2 = new Delivery(new Date(), undefined, 1);
-var cart = new Card();
-cart.addProduct(product1);
-cart.addProduct(product2);
-cart.setDelivery(delivery1);
+    return ConsoleLogger;
+}(Logger));
+var logger = new ConsoleLogger().logWithDate(new Date(), 'Hello world');
