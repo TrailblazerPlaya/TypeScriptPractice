@@ -1,26 +1,29 @@
-// Необходимо реализовать абстрактный класс Logger с 2-мя методами
-// абстрактным - log(message): void
-// printDate - выводящий в log дату
-// К нему необходимо сделать реальный класс, который бы имел метод: logWithDate,
-// выводящий сначала дату, а потом заданное сообщение
-    abstract class Logger {
-        abstract log(message: string): void;
-        printDate(date: Date): void {
-            this.log(date.toString());
-        };
+/*
+    необходимо написать функцию toString(), которая принимает любой тип и возвращает его строковое представление.
+    Если не может, то возвращает undefined
+*/
+function toString<T>(value: T) : string | undefined {
+    if (Array.isArray(value)) {
+        return value.toString();
+    } 
+    switch (typeof value) {
+        case 'string':
+            return value;
+        case 'number':
+        case 'boolean':
+        case 'symbol':
+        case 'bigint':
+        case 'function':
+            return value.toString();  
+        case 'object':
+            return JSON.stringify(value);
+        default:
+            return undefined;                   
     }
-    class ConsoleLogger extends Logger {
-        log(message: string): void {
-            console.log(message);
-        }
-        // printDate(): void {
-        //     console.log(new Date());
-        // }
+}
 
-        logWithDate(date: Date, message: string): void {
-            this.printDate(date);
-            this.log(message);
-        }
-    }
-
-    const logger = new ConsoleLogger().logWithDate(new Date(), 'Hello world');
+console.log(toString(123));
+console.log(toString('123'));
+console.log(toString(true));
+console.log(toString({a: 2, w: 4}));
+console.log(toString(['a', 'b', 'c']));
