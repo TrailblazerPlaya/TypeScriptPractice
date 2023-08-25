@@ -1,29 +1,32 @@
-/*
-    необходимо написать функцию toString(), которая принимает любой тип и возвращает его строковое представление.
-    Если не может, то возвращает undefined
-*/
-function toString<T>(value: T) : string | undefined {
-    if (Array.isArray(value)) {
-        return value.toString();
-    } 
-    switch (typeof value) {
-        case 'string':
-            return value;
-        case 'number':
-        case 'boolean':
-        case 'symbol':
-        case 'bigint':
-        case 'function':
-            return value.toString();  
-        case 'object':
-            return JSON.stringify(value);
-        default:
-            return undefined;                   
-    }
+// Необходимо написать функцию сортировки любых
+// объектов, которые имеют id по убыванию и по возрастанию
+
+function sortObjectById<T extends { id: number }>(data: T[], ascending: boolean = true): T[] {
+    return data.sort((a, b) => ascending ? a.id - b.id : a.id - b.id);
 }
 
-console.log(toString(123));
-console.log(toString('123'));
-console.log(toString(true));
-console.log(toString({a: 2, w: 4}));
-console.log(toString(['a', 'b', 'c']));
+////////////////////////////////
+interface ID {
+    id: number
+}
+
+function sort<T extends ID>( data: T[], type: 'asc' | 'desc' = 'asc'): T[] {
+    return data.sort((a, b) => {
+        switch (type) {
+            case 'asc':
+                return a.id - b.id;
+            case 'desc':
+                return b.id - a.id;    
+        }
+    })
+}
+
+
+const data = [
+	{ id: 2, name: 'Петя' },
+	{ id: 1, name: 'Вася' },
+	{ id: 3, name: 'Надя' },
+];
+
+console.log(sort(data, 'desc'));
+console.log(sortObjectById(data));
