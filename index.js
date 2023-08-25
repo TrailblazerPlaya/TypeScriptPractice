@@ -1,34 +1,24 @@
-var PaymentStatus;
-(function (PaymentStatus) {
-    PaymentStatus["Success"] = "success";
-    PaymentStatus["Failed"] = "failed";
-})(PaymentStatus || (PaymentStatus = {}));
-function isResponseSuccess(response) {
-    return response.status === PaymentStatus.Success;
+// Необходимо написать функцию сортировки любых
+// объектов, которые имеют id по убыванию и по возрастанию
+function sortObjectById(data, ascending) {
+    if (ascending === void 0) { ascending = true; }
+    return data.sort(function (a, b) { return ascending ? a.id - b.id : a.id - b.id; });
 }
-function processResponse(response) {
-    if (isResponseSuccess(response)) {
-        console.log('Успешный платеж', PaymentStatus.Success);
-    }
-    else {
-        console.log(PaymentStatus.Failed);
-    }
+function sort(data, type) {
+    if (type === void 0) { type = 'asc'; }
+    return data.sort(function (a, b) {
+        switch (type) {
+            case 'asc':
+                return a.id - b.id;
+            case 'desc':
+                return b.id - a.id;
+        }
+    });
 }
-var successResponse = {
-    status: PaymentStatus.Success,
-    data: {
-        sum: 100,
-        from: 1,
-        to: 2,
-        databaseId: 1,
-    },
-};
-var failedResponse = {
-    status: PaymentStatus.Failed,
-    data: {
-        errorMessage: 'Error',
-        errorCode: 1,
-    },
-};
-processResponse(successResponse);
-processResponse(failedResponse);
+var data = [
+    { id: 2, name: 'Петя' },
+    { id: 1, name: 'Вася' },
+    { id: 3, name: 'Надя' },
+];
+console.log(sort(data, 'asc'));
+console.log(sortObjectById(data));

@@ -1,64 +1,32 @@
-interface IPayment {
-	sum: number;
-	from: number;
-	to: number;
+// Необходимо написать функцию сортировки любых
+// объектов, которые имеют id по убыванию и по возрастанию
+
+function sortObjectById<T extends { id: number }>(data: T[], ascending: boolean = true): T[] {
+    return data.sort((a, b) => ascending ? a.id - b.id : a.id - b.id);
 }
 
-enum PaymentStatus {
-	Success = 'success',
-	Failed = 'failed',
+////////////////////////////////
+interface ID {
+    id: number
 }
 
-interface IPaymentRequest extends IPayment { }
-
-interface IDataSuccess extends IPayment {
-	databaseId: number;
+function sort<T extends ID>( data: T[], type: 'asc' | 'desc' = 'asc'): T[] {
+    return data.sort((a, b) => {
+        switch (type) {
+            case 'asc':
+                return a.id - b.id;
+            case 'desc':
+                return b.id - a.id;    
+        }
+    })
 }
 
-interface IDataFailed {
-	errorMessage: string;
-	errorCode: number;
-}
 
-interface IResponseSuccess {
-	status: PaymentStatus.Success;
-	data: IDataSuccess;
-}
+const data = [
+	{ id: 2, name: 'Петя' },
+	{ id: 1, name: 'Вася' },
+	{ id: 3, name: 'Надя' },
+];
 
-interface IResponseFailed {
-	status: PaymentStatus.Failed;
-	data: IDataFailed;
-}
-
-function isResponseSuccess(response: IResponseSuccess | IResponseFailed): response is IResponseSuccess {
-    return response.status === PaymentStatus.Success;
-}
-
-function processResponse(response: IResponseSuccess | IResponseFailed) {
-    if (isResponseSuccess(response)) {
-        console.log('Успешный платеж', PaymentStatus.Success);
-    } else {
-        console.log(PaymentStatus.Failed);
-    }
-}
-
-const successResponse: IResponseSuccess = {
-    status: PaymentStatus.Success,
-    data: {
-        sum: 100,
-        from: 1,
-        to: 2,
-        databaseId: 1,
-    },
-}
-
-const failedResponse: IResponseFailed = {
-    status: PaymentStatus.Failed,
-    data: {
-        errorMessage: 'Error',
-        errorCode: 1,
-    },
-}
-
-processResponse(successResponse);
-processResponse(failedResponse);
+console.log(sort(data, 'desc'));
+console.log(sortObjectById(data));
