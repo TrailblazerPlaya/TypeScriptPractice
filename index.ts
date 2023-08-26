@@ -1,32 +1,51 @@
-// Необходимо написать функцию сортировки любых
-// объектов, которые имеют id по убыванию и по возрастанию
+// Необходимо написать функцию группировки, которая принимает массив объектов
+// и его ключ, производит группировку по указанному ключу и возращает
+// сгруппированный объект.
 
-function sortObjectById<T extends { id: number }>(data: T[], ascending: boolean = true): T[] {
-    return data.sort((a, b) => ascending ? a.id - b.id : a.id - b.id);
+// [
+// 	{ group: 1, name: 'a' },
+// 	{ group: 1, name: 'b' },
+// 	{ group: 2, name: 'c' },
+// ];
+
+// // При группироке по 'group' ---->
+
+// // 
+// {
+// 	'1': [ { group: 1, name: 'a' }, { group: 1, name: 'b' } ],
+// 	'2': [ { group: 2, name: 'c' } ]
+// }
+
+
+interface Data {
+    group: number;
+    name: string;
 }
 
-////////////////////////////////
-interface ID {
-    id: number
-}
+const data: Data[] = [
+    { group: 1, name: 'a' },
+    { group: 1, name: 'b' },
+    { group: 2, name: 'c' },
+]
 
-function sort<T extends ID>( data: T[], type: 'asc' | 'desc' = 'asc'): T[] {
-    return data.sort((a, b) => {
-        switch (type) {
-            case 'asc':
-                return a.id - b.id;
-            case 'desc':
-                return b.id - a.id;    
+function groupBy<T extends Record<string, any>, K extends keyof T>(arr: T[], key: K) {
+    /*когда мы хотим получить что-то отсортированное, то зачастую используется reduce */
+    return arr.reduce((grouped, item) => {
+        const groupValue = item[key]; /*получаем значение ключа группировки для текущего объекта item. мы используем key для получения значения ключа группировки для каждого объекта item*/
+        if (!(groupValue in grouped)) {
+            grouped[groupValue] = []; /*если значение ключа группировки не найдено в массиве grouped, то добавляем новый элемент в массив*/
         }
-    })
+        grouped[groupValue].push(item); /*добавляем текущий объект item в массив grouped*/
+        return grouped;
+    } , {} as Record<T[K], T[]>); /*возвращаем сгруппированный объект. Мы указываем начальное значение для аккумулятора grouped в виде пустого объекта {} с помощью {} as Record<T[K], T[]>. Это позволяет нам использовать оператор индексации [groupValue] для добавления объектов в соответствующие группы 
+    
+    Record  - это утилита типов, которая позволяет создавать типы объектов с определенными ключами и значениями. 
+ 
+    Тип  Record<K, T>  принимает два параметра:  K  - тип ключей, и  T  - тип значений. Он создает новый тип, где каждый ключ типа  K  связан с значением типа  T . 
+    
+    Например,  Record<string, number>  создаст тип объекта, где ключи являются строками, а значения - числами:
+    */
 }
 
-
-const data = [
-	{ id: 2, name: 'Петя' },
-	{ id: 1, name: 'Вася' },
-	{ id: 3, name: 'Надя' },
-];
-
-console.log(sort(data, 'desc'));
-console.log(sortObjectById(data));
+const result = groupBy(data, 'group');
+console.log(result);
