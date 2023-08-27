@@ -1,51 +1,31 @@
-// Необходимо написать функцию группировки, которая принимает массив объектов
-// и его ключ, производит группировку по указанному ключу и возращает
-// сгруппированный объект.
+/** 
+ * Необходимо сделать тип для результатов валидации формы, основываясь на типе формы 
+ */
 
-// [
-// 	{ group: 1, name: 'a' },
-// 	{ group: 1, name: 'b' },
-// 	{ group: 2, name: 'c' },
-// ];
-
-// // При группироке по 'group' ---->
-
-// // 
-// {
-// 	'1': [ { group: 1, name: 'a' }, { group: 1, name: 'b' } ],
-// 	'2': [ { group: 2, name: 'c' } ]
-// }
-
-
-interface Data {
-    group: number;
+interface IForm {
     name: string;
+    password: string;
 }
 
-const data: Data[] = [
-    { group: 1, name: 'a' },
-    { group: 1, name: 'b' },
-    { group: 2, name: 'c' },
-]
-
-function groupBy<T extends Record<string, any>, K extends keyof T>(arr: T[], key: K) {
-    /*когда мы хотим получить что-то отсортированное, то зачастую используется reduce */
-    return arr.reduce((grouped, item) => {
-        const groupValue = item[key]; /*получаем значение ключа группировки для текущего объекта item. мы используем key для получения значения ключа группировки для каждого объекта item*/
-        if (!(groupValue in grouped)) {
-            grouped[groupValue] = []; /*если значение ключа группировки не найдено в массиве grouped, то добавляем новый элемент в массив*/
-        }
-        grouped[groupValue].push(item); /*добавляем текущий объект item в массив grouped*/
-        return grouped;
-    } , {} as Record<T[K], T[]>); /*возвращаем сгруппированный объект. Мы указываем начальное значение для аккумулятора grouped в виде пустого объекта {} с помощью {} as Record<T[K], T[]>. Это позволяет нам использовать оператор индексации [groupValue] для добавления объектов в соответствующие группы 
-    
-    Record  - это утилита типов, которая позволяет создавать типы объектов с определенными ключами и значениями. 
- 
-    Тип  Record<K, T>  принимает два параметра:  K  - тип ключей, и  T  - тип значений. Он создает новый тип, где каждый ключ типа  K  связан с значением типа  T . 
-    
-    Например,  Record<string, number>  создаст тип объекта, где ключи являются строками, а значения - числами:
-    */
+type FormValidationResult<T extends Record<string, any>> = {
+    // [K in keyof T]: {
+    //     isValue: boolean;
+    //     errorMassage?: string;
+    // };
+    [K in keyof T] : {
+        isValue: true;
+    } | {
+        isValue: false;
+        errorMassage: string;
+    }
+}
+const form: IForm = {
+    name: 'Kolya',
+    password: 'asdasd'
 }
 
-const result = groupBy(data, 'group');
-console.log(result);
+const formValidation: FormValidationResult<IForm> = {
+    name: { isValue: true },
+    password : { isValue: false, errorMassage: 'должен быть больше 5 символов' }
+}
+/**Здесь мы определяем тип  FormValidationResult<T> , который использует Mapped Types для создания объекта с ключами из типа  T  (в данном случае  IForm ). Каждому ключу соответствует объект с двумя свойствами:  isValue  типа  boolean  и, при необходимости,  errorMessage  типа  string . Таким образом, вы можете использовать тип  FormValidationResult<IForm>  для представления результатов валидации формы с указанием, заполнено ли поле ( isValue ) и, при необходимости, сообщения об ошибке ( errorMessage ). */
