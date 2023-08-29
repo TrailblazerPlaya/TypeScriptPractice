@@ -1,5 +1,5 @@
 /**
- * Декоратор, который добавляет свойство createdAt в класс, фиксируя дату создания
+ * Декоратор, который отлавливает ошибки
  * 
  */
 
@@ -7,22 +7,37 @@ interface IUserService  {
     users: number;
     getUserInDatabase(): number;
 }
-@CreatedAt //experimentalDecorators: true иначе будет ошибка
+
 class UserService implements IUserService  {
     users: number = 1000;
+
+    @errorHandling(false)
     getUserInDatabase(): number {
-        return this.users;
+        throw new Error("Method not implemented.");
     }
-}    
+}   
 
-function CreatedAt<T extends { new (...args: any[]): {}}>(constructor: T) {
-    return class extends constructor {
-        createdAt: Date = new Date();
+
+function errorHandling(rethrow : boolean = false) {
+    return (
+        target: Object,
+        _: string,
+        descriptor: TypedPropertyDescriptor<(...args: any[]) => any>
+    ) : TypedPropertyDescriptor<(...args: any[]) => any> | void => {
+        const originalMethod = descriptor.value;
+        descriptor.value = async (...args: any[]) => {
+            try {
+                return await originalMethod?.apply(target, args);
+            } catch (error) {
+                if(error instanceof Error) {
+                    console.log(error.message);
+                    if (rethrow) {
+                        throw error;
+                    }
+                }
+            }
+        }
     }
 }
 
-type CreatedAt = {
-    createdAt: Date
-}
-
-console.log((new UserService() as IUserService & CreatedAt).getUserInDatabase());
+console.log(new UserService().getUserInDatabase());
